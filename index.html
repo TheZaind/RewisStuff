@@ -6,199 +6,194 @@
   <title>Rewis Corner Stuff</title>
   <meta name="description" content="Drei Downloads in modernem, dunklem UI – Rewis Corner Stuff" />
   <style>
-    /*
-      ——————————————————————————————————————————————————————
-      Design-Ziele (UI/UX)
-      • Tiefes Schwarz als Bühne, hoher Weißkontrast
-      • Eckige, klare Formen (keine Rundungen)
-      • Subtiles White-Glow für Interaktivität
-      • Fokus auf Einfachheit, gute Lesbarkeit, klare Hierarchie
-      ——————————————————————————————————————————————————————
-    */
-
+    /* Farb- und Layout-Variablen */
     :root{
-      --bg: #0b0c10;          /* fast schwarz */
-      --surface: #0f1117;     /* dunkle Paneelebene */
-      --ink: #ffffff;         /* Weiß für Text & Linien */
-      --ink-60: rgba(255,255,255,.60);
-      --ink-30: rgba(255,255,255,.30);
-      --ink-12: rgba(255,255,255,.12);
-      --focus: #ffffff;       /* fokussierter Weißglow */
-      --shadow-glow: 0 0 0.4rem rgba(255,255,255,.45), 0 0 1.2rem rgba(255,255,255,.18);
-      --shadow-soft: 0 0 0.1rem rgba(255,255,255,.25), 0 0 0.6rem rgba(255,255,255,.12);
+      --bg: #0b0c10;
+      --surface: #0f1117;
+      --ink: #ffffff;
+      --muted: rgba(255,255,255,.60);
+      --thin: rgba(255,255,255,.12);
+      --glow: rgba(255,255,255,.18);
       --maxw: 1200px;
+      --preview-aspect: 16/10; /* Darstellungskasten für Vorschauen — alle Kacheln gleich groß */
     }
 
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; margin:0; }
     body{
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       background: radial-gradient(1200px 600px at 10% 0%, rgba(255,255,255,.06), rgba(255,255,255,0)) ,
                   radial-gradient(800px 800px at 100% 0%, rgba(255,255,255,.04), rgba(255,255,255,0)) ,
                   var(--bg);
-      color: var(--ink);
-      line-height: 1.5;
+      color:var(--ink); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
 
-    /* ——— Hilfsklassen ——— */
-    .container{ max-width: var(--maxw); margin-inline: auto; padding: 24px; }
-    .visually-hidden{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+    .container{ max-width:var(--maxw); margin-inline:auto; padding:28px; }
 
-    /* ——— Header mit Titel & Logo ——— */
-    header{
-      position: sticky; top: 0; z-index: 10;
-      background: linear-gradient(180deg, rgba(11,12,16,.95), rgba(11,12,16,.85));
-      border-bottom: 1px solid var(--ink-12);
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(4px);
-    }
-    .brandbar{ display:flex; align-items:center; gap: 12px; justify-content: space-between; }
-    .title{
-      margin:0; font-weight:800; text-transform:uppercase; letter-spacing:.06em;
-      font-size: clamp(18px, 3vw, 28px);
-      text-shadow: 0 0 6px rgba(255,255,255,.25);
-    }
-    .logo{
-      width: 42px; height: 42px; object-fit: contain; flex: 0 0 auto;
-      filter: drop-shadow(0 0 6px rgba(255,255,255,.35)) grayscale(100%) invert(100%);
-      image-rendering: -webkit-optimize-contrast;
-      border: 1px solid var(--ink-12); /* eckig, klar */
-      background: rgba(255,255,255,.02);
-    }
+    /* Header */
+    header{ position:sticky; top:0; z-index:20; background: linear-gradient(180deg, rgba(11,12,16,.96), rgba(11,12,16,.88)); border-bottom:1px solid var(--thin); backdrop-filter: blur(4px); }
+    .brandbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; }
+    .title{ margin:0; font-weight:800; letter-spacing:.06em; text-transform:uppercase; font-size:clamp(18px,3vw,28px); text-shadow:0 0 8px rgba(255,255,255,.18); }
+    .logo{ width:46px; height:46px; object-fit:contain; border:1px solid var(--thin); background:rgba(255,255,255,.02); filter: drop-shadow(0 0 6px rgba(255,255,255,.24)); }
 
-    /* ——— Intro/Unterzeile ——— */
-    .intro{ color: var(--ink-60); margin-top: 6px; font-size: 14px; }
+    /* Intro */
+    .intro{ color:var(--muted); margin-top:6px; font-size:14px; }
 
-    /* ——— Hauptfläche / Grid ——— */
-    main{ border-top: 1px solid var(--ink-12); }
-    .grid{
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px; padding-block: 28px;
-    }
-    @media (max-width: 960px){ .grid{ grid-template-columns: 1fr; } }
+    /* Grid für Bilder (Desktop 3 Spalten) */
+    .grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:20px; margin-top:22px; }
+    @media (max-width:980px){ .grid{ grid-template-columns: 1fr; } }
 
-    /* ——— Card (eckig, weißer Kontrast, subtiler Glow) ——— */
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
-      border: 1px solid var(--ink-12);
-      box-shadow: var(--shadow-soft);
-      display: flex; flex-direction: column; gap: 12px;
-      padding: 14px; /* eckige Kanten, keine Rundung */
-    }
+    /* Card: eckig, klar, mit leichtem Glow */
+    .card{ background: linear-gradient(180deg, rgba(255,255,255,.015), rgba(255,255,255,0)); border:1px solid var(--thin); padding:12px; display:flex; flex-direction:column; gap:12px; box-shadow: 0 0 0.1rem rgba(255,255,255,.06); }
 
-    .preview{
-      position: relative; aspect-ratio: 16/10; background: #0d0f14;
-      border: 1px solid var(--ink-12);
-      overflow: hidden; /* scharfe Kanten */
-    }
-    .preview img{
-      width: 100%; height: 100%; object-fit: cover; display: block;
-      filter: contrast(1.02) saturate(1.02);
-    }
+    /* Vorschau-Box: alle dieselbe Größe, Inhalt behält Seitenverhältnis */
+    .preview{ aspect-ratio: var(--preview-aspect); background:#0d0f14; border:1px solid var(--thin); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .preview img{ width:100%; height:100%; object-fit:contain; display:block; }
 
-    .caption{ display:flex; align-items:center; justify-content: space-between; gap: 10px; }
-    .filename{ font-size: 14px; color: var(--ink-60); }
+    .caption{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .filename{ color:var(--muted); font-size:14px; }
 
-    /* ——— Button (eckig, weißer Glow bei Hover/Focus) ——— */
-    .btn{
-      appearance: none; -webkit-appearance: none; -moz-appearance: none;
-      border: 1px solid var(--ink-30);
-      background: transparent; color: var(--ink);
-      text-transform: uppercase; letter-spacing: .08em; font-weight: 700;
-      padding: 12px 14px; cursor: pointer; text-decoration: none;
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      outline: none; user-select: none; white-space: nowrap;
-      box-shadow: none; transition: box-shadow .18s ease, transform .08s ease, border-color .18s ease;
-    }
-    .btn:hover{ box-shadow: var(--shadow-glow); border-color: var(--ink-60); }
+    /* Download-Button (eckig) */
+    .btn{ appearance:none; border:1px solid rgba(255,255,255,.25); background:transparent; color:var(--ink); padding:10px 14px; text-transform:uppercase; letter-spacing:.06em; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:10px; cursor:pointer; transition: box-shadow .18s ease, transform .08s ease, border-color .18s ease; }
+    .btn:hover{ box-shadow: 0 0 0.6rem rgba(255,255,255,.16); border-color:var(--muted); }
     .btn:active{ transform: translateY(1px); }
-    .btn:focus-visible{ box-shadow: var(--shadow-glow); border-color: var(--focus); }
+    .btn:focus-visible{ outline:2px solid rgba(255,255,255,.06); box-shadow: 0 0 1rem rgba(255,255,255,.22); }
 
-    /* ——— Footer ——— */
-    footer{ border-top: 1px solid var(--ink-12); color: var(--ink-60); font-size: 13px; }
+    /* Social-Row */
+    .socials{ display:flex; gap:14px; justify-content:center; align-items:center; margin-top:28px; flex-wrap:wrap; }
+    .social-btn{ display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border:1px solid rgba(255,255,255,.18); text-decoration:none; color:var(--ink); font-weight:700; text-transform:none; min-width:160px; justify-content:center; }
+    .social-btn:hover{ box-shadow: 0 0 0.8rem rgba(255,255,255,.14); border-color:var(--muted); }
+    .social-icon{ width:20px; height:20px; flex:0 0 20px; display:inline-block; }
+    .social-cta{ font-size:13px; color:var(--muted); display:block; margin-top:4px; text-align:center; }
 
-    /* Reduziert Bewegung wenn gewünscht */
-    @media (prefers-reduced-motion: reduce){
-      *{ transition: none !important; animation: none !important; }
-    }
+    /* GIF-Grid */
+    .gif-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:20px; margin-top:28px; }
+    @media (max-width:980px){ .gif-grid{ grid-template-columns: 1fr; } }
+    .gif-card{ border:1px solid var(--thin); padding:8px; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,0)); }
+    .gif-card img{ width:100%; height:220px; object-fit:contain; display:block; }
+
+    /* Footer / disclaimer */
+    footer{ border-top:1px solid var(--thin); margin-top:36px; padding-top:18px; }
+    .foot-row{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+    .copyright{ color:var(--muted); }
+    .disclaimer{ color:var(--muted); font-size:12px; margin-top:12px; line-height:1.4; }
+
+    @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
   </style>
 </head>
 <body>
   <header>
     <div class="container brandbar" role="banner">
       <h1 class="title">Rewis Corner Stuff</h1>
-      <!-- Logo rechts im Titelbereich -->
-      <img class="logo" src="src/placeholder.png" alt="Logo Platzhalter" width="42" height="42" />
+      <img class="logo" src="src/placeholder.png" alt="Logo Platzhalter" width="46" height="46" />
     </div>
   </header>
 
   <main>
     <div class="container">
-      <p class="intro">Drei Dateien, klare Kanten, hoher Kontrast. Klicke auf <strong>Download</strong>, um die Vollauflösung zu speichern.</p>
 
-      <!--
-        Drei Karten in einer Reihe (auf Desktop). Auf kleinen Displays stapeln sie untereinander.
-        Bilder liegen im Ordner „src“ mit den Namen bild1.png, bild2.png, bild3.png.
-      -->
-      <section class="grid" aria-label="Dateiliste">
-        <!-- Card 1 -->
-        <article class="card" tabindex="0" aria-labelledby="file1-label">
-          <figure class="preview">
-            <img src="src/bild1.png" alt="Vorschau von bild1.png" loading="lazy" />
-          </figure>
+      <p class="intro">Drei hochauflösende Bilder — gleiche Vorschau-Größe, korrektes Seitenverhältnis. Klicke <strong>Download</strong> für Vollauflösung.</p>
+
+      <!-- Bilder-Grid mit Download-Buttons unter jeweils gleicher Box -->
+      <section class="grid" aria-label="Bilder zum Download">
+        <article class="card" tabindex="0" aria-labelledby="file1">
+          <figure class="preview"><img src="src/bild1.png" alt="Vorschau von bild1.png" loading="lazy" /></figure>
           <div class="caption">
-            <span id="file1-label" class="filename">bild1.png</span>
-            <a class="btn" href="src/bild1.png" download="bild1.png" data-file="src/bild1.png" aria-label="Bild 1 in Vollauflösung herunterladen">
-              Download
-            </a>
+            <span id="file1" class="filename">bild1.png</span>
+            <a class="btn" href="src/bild1.png" download="bild1.png" data-file="src/bild1.png" aria-label="bild1.png herunterladen">Download</a>
           </div>
         </article>
 
-        <!-- Card 2 -->
-        <article class="card" tabindex="0" aria-labelledby="file2-label">
-          <figure class="preview">
-            <img src="src/bild2.png" alt="Vorschau von bild2.png" loading="lazy" />
-          </figure>
+        <article class="card" tabindex="0" aria-labelledby="file2">
+          <figure class="preview"><img src="src/bild2.png" alt="Vorschau von bild2.png" loading="lazy" /></figure>
           <div class="caption">
-            <span id="file2-label" class="filename">bild2.png</span>
-            <a class="btn" href="src/bild2.png" download="bild2.png" data-file="src/bild2.png" aria-label="Bild 2 in Vollauflösung herunterladen">
-              Download
-            </a>
+            <span id="file2" class="filename">bild2.png</span>
+            <a class="btn" href="src/bild2.png" download="bild2.png" data-file="src/bild2.png" aria-label="bild2.png herunterladen">Download</a>
           </div>
         </article>
 
-        <!-- Card 3 -->
-        <article class="card" tabindex="0" aria-labelledby="file3-label">
-          <figure class="preview">
-            <img src="src/bild3.png" alt="Vorschau von bild3.png" loading="lazy" />
-          </figure>
+        <article class="card" tabindex="0" aria-labelledby="file3">
+          <figure class="preview"><img src="src/bild3.png" alt="Vorschau von bild3.png" loading="lazy" /></figure>
           <div class="caption">
-            <span id="file3-label" class="filename">bild3.png</span>
-            <a class="btn" href="src/bild3.png" download="bild3.png" data-file="src/bild3.png" aria-label="Bild 3 in Vollauflösung herunterladen">
-              Download
-            </a>
+            <span id="file3" class="filename">bild3.png</span>
+            <a class="btn" href="src/bild3.png" download="bild3.png" data-file="src/bild3.png" aria-label="bild3.png herunterladen">Download</a>
           </div>
         </article>
       </section>
+
+      <!-- Social-Row mit CTA -->
+      <section class="socials" aria-label="Social Media Links">
+        <a class="social-btn" href="https://www.youtube.com/@ZaindTV" target="_blank" rel="noopener noreferrer" aria-label="YouTube Kanal öffnen">
+          <span class="social-icon" aria-hidden="true">
+            <!-- YouTube-Style Icon: rounded rectangle mit Dreieck -->
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="20" height="12" rx="3" stroke="currentColor" stroke-width="1.5" fill="transparent"/><path d="M10 9.5L16 12L10 14.5V9.5Z" fill="currentColor"/></svg>
+          </span>
+          <div>
+            <div>ZaindTV</div>
+            <span class="social-cta">Subscribe on YouTube</span>
+          </div>
+        </a>
+
+        <a class="social-btn" href="https://www.instagram.com/thezaind/" target="_blank" rel="noopener noreferrer" aria-label="Instagram öffnen">
+          <span class="social-icon" aria-hidden="true">
+            <!-- Instagram-Style Icon: rounded square mit Kreis -->
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.5" fill="transparent"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.2" fill="transparent"/><circle cx="17" cy="7" r="0.7" fill="currentColor"/></svg>
+          </span>
+          <div>
+            <div>@thezaind</div>
+            <span class="social-cta">Follow on Instagram</span>
+          </div>
+        </a>
+
+        <a class="social-btn" href="https://www.tiktok.com/@realzaind" target="_blank" rel="noopener noreferrer" aria-label="TikTok öffnen">
+          <span class="social-icon" aria-hidden="true">
+            <!-- TikTok-Style Icon: einfache Note -->
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 3v9a3.5 3.5 0 1 1-1.75-3.03V5.5h4.5V3H15z" fill="currentColor"/></svg>
+          </span>
+          <div>
+            <div>@realzaind</div>
+            <span class="social-cta">Watch on TikTok</span>
+          </div>
+        </a>
+
+        <a class="social-btn" href="https://twitch.tv/thezaind" target="_blank" rel="noopener noreferrer" aria-label="Twitch öffnen">
+          <span class="social-icon" aria-hidden="true">
+            <!-- Twitch-Style Icon: Chat-Box -->
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 3h14v10l-3 3H9l-2 2V3z" stroke="currentColor" stroke-width="1.3" fill="transparent"/><path d="M9 8h2v4H9zM13 8h2v4h-2z" fill="currentColor"/></svg>
+          </span>
+          <div>
+            <div>thezaind</div>
+            <span class="social-cta">Join on Twitch</span>
+          </div>
+        </a>
+      </section>
+
+      <!-- GIF-Reihe -->
+      <section class="gif-grid" aria-label="GIF Sammlung">
+        <div class="gif-card"><img src="src/gif1.gif" alt="GIF 1" loading="lazy" /></div>
+        <div class="gif-card"><img src="src/gif2.gif" alt="GIF 2" loading="lazy" /></div>
+        <div class="gif-card"><img src="src/gif3.gif" alt="GIF 3" loading="lazy" /></div>
+      </section>
+
     </div>
   </main>
 
   <footer>
     <div class="container" role="contentinfo">
-      <span>© <span id="year"></span> Rewis Corner Stuff</span>
+      <div class="foot-row">
+        <div class="copyright">© <span id="year"></span> Rewis Corner Stuff</div>
+        <div class="disclaimer" aria-live="polite">
+          Hinweis: Dieses Projekt ist Teil eines ARG und wurde unter anderem mit KI erstellt. Keine der dargestellten oder zusehenden Personen ist notwendigerweise verantwortlich für den Inhalt. Inhalte dienen fiktionalen / experimentellen Zwecken.
+        </div>
+      </div>
     </div>
   </footer>
 
   <script>
-    // JS minimal integriert: Jahr setzen, Tastatur-Download, und optionaler Blob-Fallback.
-
-    // Aktuelles Jahr
+    // aktuelles Jahr
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Keyboard: Enter auf Karte löst Download des jeweiligen Buttons aus (Barrierefreiheit)
+    // Tastatur: Enter auf Karte löst Download aus
     document.querySelectorAll('.card').forEach(card => {
       card.addEventListener('keydown', (e) => {
         if(e.key === 'Enter'){
@@ -208,33 +203,30 @@
       });
     });
 
-    // Optionaler Fallback: Wenn Browser download-Attribut ignoriert, forcieren wir einen Blob-Download
-    // (funktioniert lokal und auf gleichem Ursprung). Ansonsten erlaubt der <a download> Standardweg
-    // direktes Speichern in Vollauflösung.
-    function supportsDownloadAttribute(){
-      const a = document.createElement('a');
-      return 'download' in a;
-    }
+    // Fallback: falls browser download-Attribut ignoriert -> Blob-Download
+    (function(){
+      const supportsDownload = ('download' in document.createElement('a'));
+      if(supportsDownload) return; // moderne Browser handled
 
-    if(!supportsDownloadAttribute()){
-      document.querySelectorAll('.btn[data-file]').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-          e.preventDefault();
+      document.querySelectorAll('a.btn[data-file]').forEach(btn => {
+        btn.addEventListener('click', async (ev) => {
+          ev.preventDefault();
           const url = btn.getAttribute('data-file');
           try{
             const res = await fetch(url);
+            if(!res.ok) throw new Error('Fetch failed');
             const blob = await res.blob();
-            const name = btn.getAttribute('download') || url.split('/').pop() || 'download.png';
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = name;
-            document.body.appendChild(link);
-            link.click();
-            setTimeout(() => { URL.revokeObjectURL(link.href); link.remove(); }, 0);
-          }catch(err){ console.error('Download fehlgeschlagen:', err); }
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = btn.getAttribute('download') || url.split('/').pop();
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+          }catch(err){ console.error('Download fehlgeschlagen', err); }
         });
       });
-    }
+    })();
   </script>
 </body>
 </html>
