@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rewis Corner Stuff</title>
+  <meta name="description" content="Drei Downloads in modernem, dunklem UI – Rewis Corner Stuff" />
+  <style>
+    /*
+      ——————————————————————————————————————————————————————
+      Design-Ziele (UI/UX)
+      • Tiefes Schwarz als Bühne, hoher Weißkontrast
+      • Eckige, klare Formen (keine Rundungen)
+      • Subtiles White-Glow für Interaktivität
+      • Fokus auf Einfachheit, gute Lesbarkeit, klare Hierarchie
+      ——————————————————————————————————————————————————————
+    */
+
+    :root{
+      --bg: #0b0c10;          /* fast schwarz */
+      --surface: #0f1117;     /* dunkle Paneelebene */
+      --ink: #ffffff;         /* Weiß für Text & Linien */
+      --ink-60: rgba(255,255,255,.60);
+      --ink-30: rgba(255,255,255,.30);
+      --ink-12: rgba(255,255,255,.12);
+      --focus: #ffffff;       /* fokussierter Weißglow */
+      --shadow-glow: 0 0 0.4rem rgba(255,255,255,.45), 0 0 1.2rem rgba(255,255,255,.18);
+      --shadow-soft: 0 0 0.1rem rgba(255,255,255,.25), 0 0 0.6rem rgba(255,255,255,.12);
+      --maxw: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 10% 0%, rgba(255,255,255,.06), rgba(255,255,255,0)) ,
+                  radial-gradient(800px 800px at 100% 0%, rgba(255,255,255,.04), rgba(255,255,255,0)) ,
+                  var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    /* ——— Hilfsklassen ——— */
+    .container{ max-width: var(--maxw); margin-inline: auto; padding: 24px; }
+    .visually-hidden{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+    /* ——— Header mit Titel & Logo ——— */
+    header{
+      position: sticky; top: 0; z-index: 10;
+      background: linear-gradient(180deg, rgba(11,12,16,.95), rgba(11,12,16,.85));
+      border-bottom: 1px solid var(--ink-12);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(4px);
+    }
+    .brandbar{ display:flex; align-items:center; gap: 12px; justify-content: space-between; }
+    .title{
+      margin:0; font-weight:800; text-transform:uppercase; letter-spacing:.06em;
+      font-size: clamp(18px, 3vw, 28px);
+      text-shadow: 0 0 6px rgba(255,255,255,.25);
+    }
+    .logo{
+      width: 42px; height: 42px; object-fit: contain; flex: 0 0 auto;
+      filter: drop-shadow(0 0 6px rgba(255,255,255,.35)) grayscale(100%) invert(100%);
+      image-rendering: -webkit-optimize-contrast;
+      border: 1px solid var(--ink-12); /* eckig, klar */
+      background: rgba(255,255,255,.02);
+    }
+
+    /* ——— Intro/Unterzeile ——— */
+    .intro{ color: var(--ink-60); margin-top: 6px; font-size: 14px; }
+
+    /* ——— Hauptfläche / Grid ——— */
+    main{ border-top: 1px solid var(--ink-12); }
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px; padding-block: 28px;
+    }
+    @media (max-width: 960px){ .grid{ grid-template-columns: 1fr; } }
+
+    /* ——— Card (eckig, weißer Kontrast, subtiler Glow) ——— */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
+      border: 1px solid var(--ink-12);
+      box-shadow: var(--shadow-soft);
+      display: flex; flex-direction: column; gap: 12px;
+      padding: 14px; /* eckige Kanten, keine Rundung */
+    }
+
+    .preview{
+      position: relative; aspect-ratio: 16/10; background: #0d0f14;
+      border: 1px solid var(--ink-12);
+      overflow: hidden; /* scharfe Kanten */
+    }
+    .preview img{
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: contrast(1.02) saturate(1.02);
+    }
+
+    .caption{ display:flex; align-items:center; justify-content: space-between; gap: 10px; }
+    .filename{ font-size: 14px; color: var(--ink-60); }
+
+    /* ——— Button (eckig, weißer Glow bei Hover/Focus) ——— */
+    .btn{
+      appearance: none; -webkit-appearance: none; -moz-appearance: none;
+      border: 1px solid var(--ink-30);
+      background: transparent; color: var(--ink);
+      text-transform: uppercase; letter-spacing: .08em; font-weight: 700;
+      padding: 12px 14px; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      outline: none; user-select: none; white-space: nowrap;
+      box-shadow: none; transition: box-shadow .18s ease, transform .08s ease, border-color .18s ease;
+    }
+    .btn:hover{ box-shadow: var(--shadow-glow); border-color: var(--ink-60); }
+    .btn:active{ transform: translateY(1px); }
+    .btn:focus-visible{ box-shadow: var(--shadow-glow); border-color: var(--focus); }
+
+    /* ——— Footer ——— */
+    footer{ border-top: 1px solid var(--ink-12); color: var(--ink-60); font-size: 13px; }
+
+    /* Reduziert Bewegung wenn gewünscht */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container brandbar" role="banner">
+      <h1 class="title">Rewis Corner Stuff</h1>
+      <!-- Logo rechts im Titelbereich -->
+      <img class="logo" src="src/placeholder.png" alt="Logo Platzhalter" width="42" height="42" />
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <p class="intro">Drei Dateien, klare Kanten, hoher Kontrast. Klicke auf <strong>Download</strong>, um die Vollauflösung zu speichern.</p>
+
+      <!--
+        Drei Karten in einer Reihe (auf Desktop). Auf kleinen Displays stapeln sie untereinander.
+        Bilder liegen im Ordner „src“ mit den Namen bild1.png, bild2.png, bild3.png.
+      -->
+      <section class="grid" aria-label="Dateiliste">
+        <!-- Card 1 -->
+        <article class="card" tabindex="0" aria-labelledby="file1-label">
+          <figure class="preview">
+            <img src="src/bild1.png" alt="Vorschau von bild1.png" loading="lazy" />
+          </figure>
+          <div class="caption">
+            <span id="file1-label" class="filename">bild1.png</span>
+            <a class="btn" href="src/bild1.png" download="bild1.png" data-file="src/bild1.png" aria-label="Bild 1 in Vollauflösung herunterladen">
+              Download
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="card" tabindex="0" aria-labelledby="file2-label">
+          <figure class="preview">
+            <img src="src/bild2.png" alt="Vorschau von bild2.png" loading="lazy" />
+          </figure>
+          <div class="caption">
+            <span id="file2-label" class="filename">bild2.png</span>
+            <a class="btn" href="src/bild2.png" download="bild2.png" data-file="src/bild2.png" aria-label="Bild 2 in Vollauflösung herunterladen">
+              Download
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="card" tabindex="0" aria-labelledby="file3-label">
+          <figure class="preview">
+            <img src="src/bild3.png" alt="Vorschau von bild3.png" loading="lazy" />
+          </figure>
+          <div class="caption">
+            <span id="file3-label" class="filename">bild3.png</span>
+            <a class="btn" href="src/bild3.png" download="bild3.png" data-file="src/bild3.png" aria-label="Bild 3 in Vollauflösung herunterladen">
+              Download
+            </a>
+          </div>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container" role="contentinfo">
+      <span>© <span id="year"></span> Rewis Corner Stuff</span>
+    </div>
+  </footer>
+
+  <script>
+    // JS minimal integriert: Jahr setzen, Tastatur-Download, und optionaler Blob-Fallback.
+
+    // Aktuelles Jahr
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Keyboard: Enter auf Karte löst Download des jeweiligen Buttons aus (Barrierefreiheit)
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter'){
+          const btn = card.querySelector('.btn');
+          if(btn) btn.click();
+        }
+      });
+    });
+
+    // Optionaler Fallback: Wenn Browser download-Attribut ignoriert, forcieren wir einen Blob-Download
+    // (funktioniert lokal und auf gleichem Ursprung). Ansonsten erlaubt der <a download> Standardweg
+    // direktes Speichern in Vollauflösung.
+    function supportsDownloadAttribute(){
+      const a = document.createElement('a');
+      return 'download' in a;
+    }
+
+    if(!supportsDownloadAttribute()){
+      document.querySelectorAll('.btn[data-file]').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const url = btn.getAttribute('data-file');
+          try{
+            const res = await fetch(url);
+            const blob = await res.blob();
+            const name = btn.getAttribute('download') || url.split('/').pop() || 'download.png';
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = name;
+            document.body.appendChild(link);
+            link.click();
+            setTimeout(() => { URL.revokeObjectURL(link.href); link.remove(); }, 0);
+          }catch(err){ console.error('Download fehlgeschlagen:', err); }
+        });
+      });
+    }
+  </script>
+</body>
+</html>
